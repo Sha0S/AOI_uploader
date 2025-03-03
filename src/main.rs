@@ -54,6 +54,31 @@ async fn main() -> Result<()> {
         sql_tx.send(Message::SetIcon(IconCollor::Green)).unwrap();
 
         loop {
+
+            // 0 - check connection, reconnect if needed
+            loop {
+                match client.execute("SELECT 1", &[]).await {
+                    Ok(_) => {
+                        break;
+                    }
+                    Err(_) => {
+                        warn!("Connection to DB lost, reconnecting!");
+                        client = 
+                        loop {
+                            if let Ok(client) =  create_connection(&config).await {
+                                break client;
+                            }
+
+                            sql_tx.send(Message::SetIcon(IconCollor::Red)).unwrap();
+                            error!("Failed to connect to the SQL server, retrying in 60s.");
+                            sleep(Duration::from_secs(60)).await;
+                        }
+                        ;  
+                    }
+                }
+            }
+
+
             debug!("AOI auto update started");
             let start_time = chrono::Local::now();
             
