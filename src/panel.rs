@@ -238,7 +238,10 @@ pub fn parse_xml(path: &PathBuf, line: &str) -> Result<Panel> {
 
                     
                     if let Ok(x) = PCBNumber.parse::<usize>() {
-                        if let Some(board) = ret.Boards.get_mut(x) {
+                        if x == 0 {
+                            error!("BoardNumber is 0. Was excepting 1+");
+                            bail!("BoardNumber is 0. Was excepting 1+");
+                        } else if let Some(board) = ret.Boards.get_mut(x - 1) {
                             if let Some(c) = WinID.rfind('-') {
                                 let split = WinID.split_at(c);
                                 WinID = split.0.to_string();
@@ -344,6 +347,8 @@ pub fn parse_xml(path: &PathBuf, line: &str) -> Result<Panel> {
     };
 
     info!("Processing OK.");
+
+    debug!("Ret: {ret:?}");
 
     Ok(ret)
 }
