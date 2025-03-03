@@ -1,0 +1,5 @@
+green-icon ICON "./icons/green.ico"
+red-icon ICON "./icons/red.ico"
+yellow-icon ICON "./icons/yellow.ico"
+grey-icon ICON "./icons/grey.ico"
+purple-icon ICON "./icons/purple.ico"
